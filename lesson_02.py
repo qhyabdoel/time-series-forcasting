@@ -17,6 +17,16 @@ data = {
 }
 
 df = pd.DataFrame(data)
+df["date"] = pd.to_datetime(df["date"])
 
-print(df)
-print(df.info())
+# df = df.sort_values(by="likes").reset_index(drop=True)
+
+# print(df)
+# print(df.info())
+# print(df.dtypes)
+
+weekly_data = df.resample("W", on="date").agg(
+    {"followers": "last", "likes": "sum", "comments": "sum"}
+)
+
+print(weekly_data)
