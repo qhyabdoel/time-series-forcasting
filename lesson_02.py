@@ -1,32 +1,46 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-data = {
-    "date": [
-        "2026-11-01",
-        "2026-11-02",
-        "2026-11-03",
-        "2026-11-04",
-        "2026-11-05",
-        "2026-11-06",
-        "2026-11-07",
-    ],
-    "followers": [1000, 1020, 1040, 1050, 1080, 1100, 1150],
-    "likes": [120, 135, 150, 140, 180, 190, 220],
-    "comments": [15, 18, 20, 17, 25, 28, 32],
-}
+# 1. Membuat data contoh
+np.random.seed(42)
 
-df = pd.DataFrame(data)
-df["date"] = pd.to_datetime(df["date"])
+dates = pd.date_range(start="2026-10-01", periods=30, freq="D")
 
-# df = df.sort_values(by="likes").reset_index(drop=True)
-
-# print(df)
-# print(df.info())
-# print(df.dtypes)
-
-weekly_data = df.resample("W", on="date").agg(
-    {"followers": "last", "likes": "sum", "comments": "sum"}
+df = pd.DataFrame(
+    {
+        "date": dates,
+        "followers": 1000 + np.arange(30) * 15,
+        "likes": np.random.randint(100, 300, 30),
+        "comments": np.random.randint(10, 50, 30),
+    }
 )
 
-print(weekly_data)
+# 2. Membuat beberapa missing values
+df.loc[5, "likes"] = np.nan
+df.loc[10, "comments"] = np.nan
+
+# 3. Memastikan tipe tanggal
+df["date"] = pd.to_datetime(df["date"])
+
+# 4. Sorting
+df = df.sort_values("date")
+
+# 5. Mengisi missing values
+df["likes"] = df["likes"].interpolate()
+df["comments"] = df["comments"].interpolate()
+
+# 6. Membuat date sebagai index
+df = df.set_index("date")
+
+# 7. Resampling menjadi mingguan
+weekly = df.resample("W").agg({"followers": "last", "likes": "sum", "comments": "sum"})
+
+# 8. Visualisasi
+weekly["likes"].plot(figsize=(10, 5), marker="o", title="Weekly Instagram Likes")
+
+plt.ylabel("Total Likes")
+plt.grid()
+plt.show()
+
+print(weekly)
