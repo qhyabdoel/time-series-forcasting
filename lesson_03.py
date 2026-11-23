@@ -8,7 +8,7 @@ np.random.seed(42)
 dates = pd.date_range(start="2026-08-01", periods=90, freq="D")
 
 # Efek hari dalam seminggu
-weekly_effect = np.array([-20, -15, -10, 0, 10, 35, 25])[dates.dayofweek]
+weekly_effect = np.array([-20, -15, -10, 0, 10, 35, 25])[dates.day_of_week]
 
 # Membuat trend + seasonality + noise
 likes = 150 + 0.8 * np.arange(90) + weekly_effect + np.random.normal(0, 8, 90)
@@ -29,4 +29,7 @@ plt.legend()
 plt.grid(True)
 
 plt.tight_layout()
-plt.show()
+# plt.show()
+
+plt.savefig("lesson_03.png", dpi=150, bbox_inches="tight")
+plt.close()
