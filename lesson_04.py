@@ -70,4 +70,6 @@ plt.ylabel("Likes")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+# plt.show()
+
+plt.savefig("lesson_04.png", dpi=150, bbox_inches="tight")
