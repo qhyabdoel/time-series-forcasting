@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data = {"followers": [10, 20, 30, 40, 50, 60, 70]}
+data = {"followers": [10, 20, 40, 30, 70, 50, 60]}
 
 df = pd.DataFrame(data)
 
